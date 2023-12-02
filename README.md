@@ -9,4 +9,4 @@ Here should be description with chunks of code
 My task was to create a service for a booking tickets
 <br> I created an ERD with 3 entities in it:
 
-<img src="./Not for project/img.png" />
+<img src="addons/img.png" />
