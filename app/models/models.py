@@ -1,18 +1,18 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
+from app import db
 
-Base = declarative_base()
 
-
-class User(Base):
+class User(db.Model):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True, nullable=False)
+    username = Column(String, unique=False, nullable=False)
     email = Column(String, unique=True, nullable=False)
+    password = Column(String, unique=False, nullable=False)
     ticket = relationship('Ticket', back_populates='user')
 
 
-class Event(Base):
+class Event(db.Model):
     __tablename__ = 'event'
     id = Column(Integer, primary_key=True)
     event_name = Column(String, unique=True, nullable=False)
@@ -21,7 +21,7 @@ class Event(Base):
     ticket = relationship('Ticket', back_populates='event')
 
 
-class Ticket(Base):
+class Ticket(db.Model):
     __tablename__ = 'ticket'
     id = Column(Integer, primary_key=True)
     status = Column(String, unique=True, nullable=False)
