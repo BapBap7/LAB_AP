@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pay for tickets?</title>
+</head>
+<body>
+    <form action="{{ url_for('user.payment') }}" method="post">
+        <input type="hidden" name="selected_ticket_ids" value="{{ selected_ticket_ids|join(',') }}">
+        <button type="submit">Pay</button>
+        <button type="button" onclick="cancelPayment()">Cancel</button>
+    </form>
+
+    <script>
+        function cancelPayment() {
+            // Implement any cancellation logic here, such as redirecting to another page
+            alert("Payment canceled");
+
+        }
+    </script>
+</body>
+</html>

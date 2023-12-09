@@ -1,0 +1,18 @@
+<!-- badrequest.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bad Payment</title>
+</head>
+<body>
+    <h1>Bad Payment</h1>
+    <p>Redirecting to the dashboard in 5 seconds...</p>
+
+    <script>
+        setTimeout(function() {
+            window.location.href = "{{ url_for('event.bad_payment_processing') }}";
+        }, 2000); // 5000 milliseconds = 5 seconds
+    </script>
+</body>
+</html>
