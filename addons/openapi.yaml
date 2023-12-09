@@ -73,7 +73,7 @@ paths:
           description: Bad request, you dont have permission to delete this event
         '404':
           description: Event not found
-    patch:
+    put:
       summary: Update event details
       tags:
         - Events
@@ -145,7 +145,7 @@ paths:
           description: Bad request, you dont have permission to delete this event
         '404':
           description: User not found
-    patch:
+    put:
       summary: Update user details
       tags:
         - User

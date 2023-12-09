@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<h1>Welcome to Your Dashboard, {{ current_user.username }}!</h1>
+
+<h2>Your Tickets:</h2>
+<h3>BOOKED tickets</h3>
+<form action="{{ url_for('user.buy_tickets') }}" method="post">
+    <ul>
+        {% for ticket in user_tickets %}
+        {% if ticket.status == 'BOOKED' %}
+        <li>
+            <input type="checkbox" name="selected_tickets" value="{{ ticket.id }}">
+            Event: {{ ticket.event.event_name }}
+            Status: {{ ticket.status }}
+            Ticket ID {{ticket.id}}
+            <button type="button" onclick="unbookTicket('{{ ticket.event_id }}', '{{ ticket.id }}')">Unbook Ticket
+            </button>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    <button type="submit" id="buyButton" disabled>Buy Selected Tickets</button>
+</form>
+<h3>BOUGHT tickets</h3>
+<ul>
+    {% for ticket in user_tickets %}
+    {% if ticket.status == 'BOUGHT' %}
+    <li>
+        Event: {{ ticket.event.event_name }}
+        Status: {{ ticket.status }}
+        Ticket: {{ ticket.id }}
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+<script>
+    function unbookTicket(eventId, ticketId) {
+        // Use JavaScript (e.g., fetch or axios) to send a request to book the ticket
+        fetch(`/unbook-ticket/${ticketId}`, {method: 'POST'})
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        document.getElementById('error-message').style.display = "block";
+                        document.getElementById('error-message').innerText = 'Unauthorized to book this ticket';
+                    } else {
+                        // Handle other errors
+                        console.error('Error:', response.status);
+                    }
+                } else {
+                    location.reload()
+                }
+            })
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get all checkboxes with the name 'selected_tickets'
+    const checkboxes = document.querySelectorAll('input[name="selected_tickets"]');
+
+    // Get the Buy Selected Tickets button
+    const buyButton = document.getElementById('buyButton');
+
+    // Add event listeners to checkboxes to update button state
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateBuyButtonState);
+    });
+
+    function updateBuyButtonState() {
+        // Check if any checkbox is checked
+        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+        // Enable or disable the button based on the checkbox state
+        buyButton.disabled = !anyChecked;
+    }
+});
+</script>
+</body>
+</html>

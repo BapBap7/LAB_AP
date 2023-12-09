@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+</head>
+<body>
+<h2>Event Details</h2>
+<p>Name: {{ event.event_name }}</p>
+<p>Description: {{ event.event_description }}</p>
+<p>Total Tickets: {{ event.total_tickets }}</p>
+
+<h3>Available tickets</h3>
+<ul>
+    {% for ticket in tickets %}
+    {% if ticket.status == 'AVAILABLE' %}
+    <li>
+        Ticket ID {{ticket.id}}
+        <button onclick="bookTicket('{{ event.id }}', '{{ ticket.id }}')">Book Ticket</button>
+        <form action="{{ url_for('event.buy_ticket', ticket_id=ticket.id) }}" method="post">
+            <button type="submit">Buy Ticket</button>
+        </form>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+
+<h2>Booked tickets</h2>
+<ul>
+    {% for ticket in tickets %}
+    {% if ticket.user == current_user and ticket.status == 'BOOKED' %}
+    <li>
+        Ticket ID {{ticket.id}}
+        <button onclick="unbookTicket('{{ event.id }}', '{{ ticket.id }}')">Unbook Ticket</button>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+
+<h2>Bought tickets</h2>
+<ul>
+    {% for ticket in tickets %}
+    {% if ticket.status == 'BOUGHT' %}
+    <li>
+        Ticket ID {{ticket.id}}
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+
+
+<div id="error-message" style="color: red; display: none;"></div>
+
+
+<script>
+    function bookTicket(eventId, ticketId) {
+        // Use JavaScript (e.g., fetch or axios) to send a request to book the ticket
+        fetch(`/book-ticket/${ticketId}`, {method: 'POST'})
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        document.getElementById('error-message').style.display = "block";
+                        document.getElementById('error-message').innerText = 'Unauthorized to book this ticket';
+                    } else {
+                        // Handle other errors
+                        console.error('Error:', response.status);
+                    }
+                } else {
+                    location.reload()
+                }
+            })
+    }
+
+
+    // function buyTicket(eventId, ticketId) {
+    //     fetch(`/buy-ticket/${ticketId}`, {method: 'POST'})
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 if (response.status === 401) {
+    //                     document.getElementById('error-message').style.display = "block";
+    //                     document.getElementById('error-message').innerText = 'Unauthorized to buy this ticket';
+    //                 } else {
+    //                     // Handle other errors
+    //                     console.error('Error:', response.status);
+    //                 }
+    //             } else {
+    //                 // Purchase was successful
+    //                 return response.json();  // Assuming the server sends JSON with the response
+    //             }
+    //         })
+    //         .then(data => {
+    //             // Check the response data for the purchase status
+    //             if (data && data.message === 'Ticket bought successfully') {
+    //                 // Redirect to the payment success page
+    //                 window.location.href = '/payment-success';
+    //             } else {
+    //                 // Redirect to the bad payment page
+    //                 window.location.href = '/bad-payment';
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //             // Handle other errors
+    //         });
+    // }
+
+
+    function unbookTicket(eventId, ticketId) {
+        // Use JavaScript (e.g., fetch or axios) to send a request to book the ticket
+        fetch(`/unbook-ticket/${ticketId}`, {method: 'POST'})
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        document.getElementById('error-message').style.display = "block";
+                        document.getElementById('error-message').innerText = 'Unauthorized to book this ticket';
+                    } else {
+                        // Handle other errors
+                        console.error('Error:', response.status);
+                    }
+                } else {
+                    location.reload()
+                }
+            })
+    }
+
+
+</script>
+</body>
+</html>
