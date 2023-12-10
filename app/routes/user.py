@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, url_for, render_template, redirect
 from flask_bcrypt import Bcrypt
-from app import db, login_manager, login_required, login_user, logout_user, current_user
+from app import db, login_manager, login_required, login_user, logout_user, current_user, app
 from app.models.models import User, LoginForm, RegistrationForm, Ticket
 
 
