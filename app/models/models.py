@@ -5,6 +5,10 @@ from app import db
 from wtforms import StringField, PasswordField, SubmitField, EmailField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_login import UserMixin
+from flask_bcrypt import Bcrypt
+
+
+bcrypt = Bcrypt()
 
 
 class User(db.Model, UserMixin):
@@ -66,3 +70,5 @@ class LoginForm(FlaskForm):
                            render_kw={'placeholder': 'Password'})
 
     submit = SubmitField('Login')
+
+

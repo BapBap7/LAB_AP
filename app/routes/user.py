@@ -4,7 +4,7 @@ from app import db, login_manager, login_required, login_user, logout_user, curr
 from app.models.models import User, LoginForm, RegistrationForm, Ticket
 
 
-user_blueprint = Blueprint('user', __name__)
+user_blueprint = Blueprint('user_blueprint', __name__)
 bcrypt = Bcrypt()
 
 
@@ -36,28 +36,12 @@ def payment():
     # Perform the purchase logic for the selected tickets (update status, etc.)
     for ticket_id in selected_ticket_ids:
         ticket = Ticket.query.get(ticket_id)
-        if ticket and ticket.status == 'BOOKED':
+        if ticket:
             ticket.status = 'BOUGHT'
             # Perform other purchase-related logic as needed
             db.session.commit()
 
-    return redirect(url_for('user.dashboard'))
-
-
-@user_blueprint.route('/user/<int:user_id>', methods=['GET'])
-def get_user(user_id):
-    user = User.query.get(user_id)
-
-    if user:
-        user_data = {
-            'id': user.id,
-            'email': user.email,
-            'username': user.username
-
-        }
-        return jsonify({'user': user_data}), 200
-    else:
-        return jsonify({'message': 'User not found'}), 404
+    return redirect(url_for('user_blueprint.dashboard'))
 
 
 @user_blueprint.route('/login', methods=['GET', 'POST'])
@@ -68,7 +52,7 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for('user.dashboard'))
+                return redirect(url_for('user_blueprint.dashboard'))
     return render_template('login.html', form=form)
 
 
@@ -76,7 +60,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('user.login'))
+    return redirect(url_for('user_blueprint.login'))
 
 
 @user_blueprint.route('/register', methods=['GET', 'POST'])
@@ -89,7 +73,7 @@ def register():
             new_user = User(email=form.email.data, username=form.username.data, password=hashed_password)
             db.session.add(new_user)
             db.session.commit()
-            return redirect(url_for('user.login'))
+            return redirect(url_for('user_blueprint.login'))
     except Exception as e:
         return str(e), 404
 

@@ -3,7 +3,7 @@ from app import db, login_required, current_user
 from app.models.models import Event, Ticket
 
 
-event_blueprint = Blueprint('event', __name__)
+event_blueprint = Blueprint('event_blueprint', __name__)
 
 
 @event_blueprint.route('/create-event', methods=['POST'])
@@ -38,7 +38,7 @@ def show_events():
         # If event_id is provided, retrieve details for a specific event
         event = Event.query.get(event_id)
         if event:
-            return redirect(url_for('event.get_event', event_id=event_id))
+            return redirect(url_for('event_blueprint.get_event', event_id=event_id))
         else:
             return jsonify({'message': 'Event not found'}), 404
     else:
@@ -57,30 +57,6 @@ def get_event(event_id):
     tickets = Ticket.query.filter_by(event_id=event_id).all()
 
     return render_template('event_details.html', event=event, tickets=tickets)
-
-
-# @event_blueprint.route('/events/<int:event_id>/tickets', methods=['GET'])
-# def get_tickets_by_event_id(event_id):
-#     event = Event.query.get(event_id)
-#
-#     if not event:
-#         return jsonify({'message': 'Event not found'}), 404
-#
-#     tickets = Ticket.query.filter_by(event_id=event_id).all()
-#
-#     ticket_list = []
-#     for ticket in tickets:
-#         ticket_data = {
-#             'ticket_id': ticket.id,
-#             'user_id': ticket.user_id,
-#             'status': ticket.status,
-#         }
-#         ticket_list.append(ticket_data)
-#
-#     return jsonify({'event_id': event.id, 'tickets': ticket_list}), 200
-
-
-# routes/event.py
 
 
 # Book ticket
@@ -132,20 +108,6 @@ def buy_ticket(ticket_id):
     ticket = Ticket.query.get(ticket_id)
     if not ticket or ticket.status != 'AVAILABLE':
         return jsonify({'message': 'Ticket not available'}), 404
-    ticket.status = 'BOOKED'
-    ticket.user_id = current_user.id
-    db.session.commit()
     return render_template('wait_payment.html', selected_ticket_ids=[ticket.id])
 
 
-# Example for handling payment failure
-@event_blueprint.route('/bad-payment', methods=['GET'])
-@login_required
-def bad_payment():
-    return render_template('bad_payment.html')
-
-
-@event_blueprint.route('/bad-payment-processing', methods=['GET'])
-@login_required
-def bad_payment_processing():
-    return redirect(url_for('user.dashboard'))

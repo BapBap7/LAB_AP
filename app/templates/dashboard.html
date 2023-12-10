@@ -8,8 +8,8 @@
 <h1>Welcome to Your Dashboard, {{ current_user.username }}!</h1>
 
 <h2>Your Tickets:</h2>
-<h3>BOOKED tickets</h3>
-<form action="{{ url_for('user.buy_tickets') }}" method="post">
+<h2>BOOKED tickets</h2>
+<form action="{{ url_for('user_blueprint.buy_tickets') }}" method="post">
     <ul>
         {% for ticket in user_tickets %}
         {% if ticket.status == 'BOOKED' %}
@@ -26,7 +26,7 @@
     </ul>
     <button type="submit" id="buyButton" disabled>Buy Selected Tickets</button>
 </form>
-<h3>BOUGHT tickets</h3>
+<h2>BOUGHT tickets</h2>
 <ul>
     {% for ticket in user_tickets %}
     {% if ticket.status == 'BOUGHT' %}
