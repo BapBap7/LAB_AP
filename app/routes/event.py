@@ -106,7 +106,7 @@ def unbook_ticket(ticket_id):
 @login_required  # Ensure the user is logged in to book a ticket
 def buy_ticket(ticket_id):
     ticket = Ticket.query.get(ticket_id)
-    if not ticket or ticket.status != 'AVAILABLE':
+    if not ticket:
         return jsonify({'message': 'Ticket not available'}), 404
     return render_template('wait_payment.html', selected_ticket_ids=[ticket.id])
 

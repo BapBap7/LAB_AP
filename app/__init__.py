@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_admin import Admin
@@ -21,9 +21,19 @@ def home():
 
 from app.models.models import User
 
-admin = Admin(app, name="AdminUser", template_mode='bootstrap3')
-admin.add_view(ModelView(User, db.session, name='UserAdmin'))
 
+class CustomAdminModelView(ModelView):
+    def is_accessible(self):
+        # Check if the current user is authenticated and is an admin
+        return current_user and current_user.is_admin
+
+    def inaccessible_callback(self, name, **kwargs):
+        # Redirect non-admin users to the login page
+        return redirect(url_for('user_blueprint.login'))
+
+
+admin = Admin(app, name="AdminUser", template_mode='bootstrap3')
+admin.add_view(CustomAdminModelView(User, db.session, name='UserAdmin'))
 
 from app.routes.user import user_blueprint
 from app.routes.event import event_blueprint

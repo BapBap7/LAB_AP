@@ -38,6 +38,7 @@ def payment():
         ticket = Ticket.query.get(ticket_id)
         if ticket:
             ticket.status = 'BOUGHT'
+            ticket.user_id = current_user.id
             # Perform other purchase-related logic as needed
             db.session.commit()
 
