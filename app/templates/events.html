@@ -9,7 +9,7 @@
     <h1>Event List</h1>
     <ul>
         {% for event in events %}
-            <li><a href="{{ url_for('event.show_events', event_id=event.id) }}">{{ event.event_name }}</a></li>
+            <li><a href="{{ url_for('event_blueprint.show_events', event_id=event.id) }}">{{ event.event_name }}</a></li>
         {% endfor %}
     </ul>
 </body>

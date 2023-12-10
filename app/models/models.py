@@ -1,10 +1,14 @@
 from flask_wtf import FlaskForm
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import declarative_base, relationship
 from app import db
 from wtforms import StringField, PasswordField, SubmitField, EmailField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_login import UserMixin
+from flask_bcrypt import Bcrypt
+
+
+bcrypt = Bcrypt()
 
 
 class User(db.Model, UserMixin):
@@ -13,6 +17,7 @@ class User(db.Model, UserMixin):
     username = Column(String, unique=False, nullable=False)
     email = Column(String, unique=True, nullable=False)
     password = Column(String, unique=False, nullable=False)
+    is_admin = Column(Boolean, default=False, nullable=False, unique=False)
     ticket = relationship('Ticket', back_populates='user')
 
 
@@ -66,3 +71,5 @@ class LoginForm(FlaskForm):
                            render_kw={'placeholder': 'Password'})
 
     submit = SubmitField('Login')
+
+

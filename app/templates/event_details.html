@@ -18,7 +18,7 @@
     <li>
         Ticket ID {{ticket.id}}
         <button onclick="bookTicket('{{ event.id }}', '{{ ticket.id }}')">Book Ticket</button>
-        <form action="{{ url_for('event.buy_ticket', ticket_id=ticket.id) }}" method="post">
+        <form action="{{ url_for('event_blueprint.buy_ticket', ticket_id=ticket.id) }}" method="post">
             <button type="submit">Buy Ticket</button>
         </form>
     </li>
@@ -26,7 +26,7 @@
     {% endfor %}
 </ul>
 
-<h2>Booked tickets</h2>
+<h3>My booked tickets</h3>
 <ul>
     {% for ticket in tickets %}
     {% if ticket.user == current_user and ticket.status == 'BOOKED' %}
@@ -38,7 +38,7 @@
     {% endfor %}
 </ul>
 
-<h2>Bought tickets</h2>
+<h3>Bought tickets</h3>
 <ul>
     {% for ticket in tickets %}
     {% if ticket.status == 'BOUGHT' %}
