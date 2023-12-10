@@ -26,6 +26,7 @@ class CustomUser(ModelView):
 
         return redirect(url_for('events_admin.index_view'))
 
+
 class CustomEvent(ModelView):
     def is_accessible(self):
         if current_user.is_authenticated:
