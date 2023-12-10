@@ -1,25 +1,25 @@
 from app.models.models import Event, Ticket
 from flask_admin.contrib.sqla import ModelView
-from flask import redirect, url_for
+from flask import redirect, url_for, abort
 from app import db, current_user
-
 
 
 class CustomUser(ModelView):
     column_list = ['id', 'username', 'email', 'is_admin']
-    def is_accessible(self):
-        return current_user.is_admin
 
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('user_blueprint.dashboard'))
+    def is_accessible(self):
+        if current_user.is_authenticated:
+            if current_user.is_admin:
+                return True
+        abort(403)
 
 
 class CustomEvent(ModelView):
     def is_accessible(self):
-        return current_user.is_admin
-
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('user_blueprint.dashboard'))
+        if current_user.is_authenticated:
+            if current_user.is_admin:
+                return True
+        abort(403)
 
     def create_model(self, form):
         try:
@@ -44,7 +44,7 @@ class CustomTicket(ModelView):
     column_list = ['id', 'status', 'user_id', 'event_id']
 
     def is_accessible(self):
-        return current_user.is_admin
-
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('user_blueprint.dashboard'))
+        if current_user.is_authenticated:
+            if current_user.is_admin:
+                return True
+        abort(403)
