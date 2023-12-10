@@ -13,6 +13,18 @@ class CustomUser(ModelView):
                 return True
         abort(403)
 
+    def delete_model(self, model):
+        try:
+            Ticket.query.filter_by(user_id=model.id).update({Ticket.user_id: None, Ticket.status: 'AVAILABLE'},
+                                                            synchronize_session=False)
+
+            db.session.delete(model)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+
+        return redirect(url_for('events_admin.index_view'))
 
 class CustomEvent(ModelView):
     def is_accessible(self):
@@ -38,6 +50,18 @@ class CustomEvent(ModelView):
         except Exception as e:
             db.session.rollback()
             return redirect(url_for('events_admin.index_view'))
+
+    def delete_model(self, model):
+        try:
+            Ticket.query.filter_by(event_id=model.id).delete()
+
+            db.session.delete(model)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+
+        return redirect(url_for('events_admin.index_view'))
 
 
 class CustomTicket(ModelView):

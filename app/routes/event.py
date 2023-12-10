@@ -109,5 +109,3 @@ def buy_ticket(ticket_id):
     if not ticket:
         return jsonify({'message': 'Ticket not available'}), 404
     return render_template('wait_payment.html', selected_ticket_ids=[ticket.id])
-
-
