@@ -56,7 +56,7 @@ def login():
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
                 return redirect(url_for('user_blueprint.dashboard')), 302
-    return render_template('login.html', form=form), 400
+    return render_template('login.html', form=form), 200
 
 
 @user_blueprint.route('/logout', methods=['GET', 'POST'])
@@ -77,11 +77,11 @@ def register():
             new_user = User(email=form.email.data, username=form.username.data, password=hashed_password)
             db.session.add(new_user)
             db.session.commit()
-            return redirect(url_for('user_blueprint.login'))
+            return redirect(url_for('user_blueprint.login')), 302
     except Exception as e:
         return str(e), 404
 
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=form), 400
 
 
 # =====================

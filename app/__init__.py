@@ -16,7 +16,7 @@ login_manager.init_app(app)
 api = Api(app, version='1.0', title='Your API', description='API Documentation', doc='/api/docs')
 
 
-@app.route('/')
+@app.route('/home', methods=['GET'])
 def home():
     return render_template('index.html')
 
