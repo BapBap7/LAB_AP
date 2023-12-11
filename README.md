@@ -10,6 +10,7 @@ To start this project you should
 4. Upgrade database <code>alembic upgrade head</code>
 5. Run the project with <code>flask run</code>
 6. Optional. If you want to run tests write <code>pytest test/test.py</code>
+7. Optional. To use swagger go to localhost:5000/api/docs
 
 ## Short description of a project.
 My task was to create a service for a booking tickets
