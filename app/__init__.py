@@ -2,12 +2,13 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_admin import Admin
+from app.config import Config, DevelopmentConfig, TestConfig
 
 
 # creating an app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1111@localhost:5432/LABAP'
-app.config['SECRET_KEY'] = 'secret_key_for_lab'
+app.config.from_object(DevelopmentConfig)
+
 # db initialization
 db = SQLAlchemy(app)
 login_manager = LoginManager()

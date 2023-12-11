@@ -53,8 +53,8 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for('user_blueprint.dashboard'))
-    return render_template('login.html', form=form)
+                return redirect(url_for('user_blueprint.dashboard')), 302
+    return render_template('login.html', form=form), 400
 
 
 @user_blueprint.route('/logout', methods=['GET', 'POST'])
