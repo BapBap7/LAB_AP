@@ -26,6 +26,23 @@ class CustomUser(ModelView):
 
         return redirect(url_for('events_admin.index_view'))
 
+    def update_model(self, form, model):
+        try:
+            event_name = form.event_name.data
+            event_description = form.event_description.data
+            total_tickets = int(form.total_tickets.data)
+
+            model.event_name = event_name
+            model.event_description = event_description
+            model.total_tickets = total_tickets
+
+            db.session.commit()
+
+            return redirect(url_for('events_admin.index_view'))
+        except Exception as e:
+            db.session.rollback()
+            return redirect(url_for('events_admin.index_view'))
+
 
 class CustomEvent(ModelView):
     def is_accessible(self):

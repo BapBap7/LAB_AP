@@ -3,16 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_admin import Admin
 from app.config import Config, DevelopmentConfig, TestConfig
-
+from flask_restx import Api, Resource, fields
 
 # creating an app
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
-
 # db initialization
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+api = Api(app, version='1.0', title='Your API', description='API Documentation', doc='/api/docs')
 
 
 @app.route('/')
