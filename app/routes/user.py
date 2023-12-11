@@ -48,6 +48,8 @@ def payment():
 @user_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('user_blueprint.dashboard')), 302
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
@@ -67,7 +69,8 @@ def logout():
 @user_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
-
+    if current_user.is_authenticated:
+        return redirect(url_for('user_blueprint.dashboard')), 302
     try:
         if form.validate_on_submit():
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
